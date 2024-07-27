@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <label for="fn">First Name</label><br>
+        <input type="text" name="fn" id="fn"><br>
+
+        <label for="fn">Last Name</label><br>
+        <input type="text" name="ln" id="ln"><br>
+        
+        <input type="file" name="file" id="files" multiple><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+    
+            e.preventDefault();
+            // Prevents HTML handling submission
+            const fn = document.getElementById("fn");
+            const ln =document.getElementById("ln");
+            const files = document.getElementById("files");
+
+            const formData = new FormData();
+            formData.append("fn", fn.value);
+            formData.append("ln",ln.value);
+            // Appends value of text input
+            for(let i =0; i<files.files.length; i++) {
+                formData.append("files", files.files[i]);
+            }
+
+            console.log(...formData);
+            // Appends value(s) of file input
+            // Post data to Node and Express server:
+            fetch('http://127.0.0.1:5000/uploads', {
+                method: 'POST',
+                body: formData, // Payload is formData object
+            })
+            .then(res => res.json())
+            .then(data => console.log(data));
+        })
+    </script>
+    
+</body>
+</html>
